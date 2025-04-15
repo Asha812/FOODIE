@@ -1,0 +1,1860 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FOODIE | Кулинарная библиотека</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #65b30c;
+            --primary-light: #c0ff78;
+            --dark: #222;
+            --light: #f9f9f9;
+            --gray: #7f8c8d;
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Jost', sans-serif;
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Шапка */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            transition: var(--transition);
+        }
+        
+        header.scrolled {
+            background: var(--primary);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            color: var(--primary-light);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 5px 0;
+            transition: var(--transition);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: white;
+            transition: var(--transition);
+        }
+        
+        nav a:hover::after,
+        nav a.active::after {
+            width: 100%;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        /* Герой секция */
+        .hero {
+            height: 100vh;
+            min-height: 700px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin-top: -80px;
+            padding-top: 80px;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.3));
+            z-index: 1;
+        }
+        
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            padding: 0 20px;
+            text-align: center;
+            color: white;
+        }
+        
+        .hero-title {
+            font-family: 'Jost', serif;
+            
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 1s ease;
+        }
+        
+        .hero-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.5rem);
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.3s forwards;
+            opacity: 0;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 18px;
+            transition: var(--transition);
+            border: 2px solid var(--primary);
+            animation: fadeInUp 1s ease 0.6s forwards;
+            opacity: 0;
+        }
+        
+        .btn:hover {
+            background: transparent;
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border-color: white;
+            margin-left: 15px;
+        }
+        
+        .btn-outline:hover {
+            background: white;
+            color: var(--dark);
+        }
+        
+        /* Поиск и категории (добавлены из FOODIE.html) */
+        .search-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 30px;
+            font-size: 16px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            outline: none;
+            transition: var(--transition);
+        }
+        
+        .search-box:focus {
+            box-shadow: 0 5px 20px rgba(101, 179, 12, 0.3);
+        }
+        
+        .categories {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 40px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            justify-content: center;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding: 0 20px;
+        }
+        
+        .categories::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .category {
+            background-color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            white-space: nowrap;
+            transition: var(--transition);
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .category:hover, .category.active {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Особенности */
+        .features {
+            padding: 100px 0;
+            background: white;
+        }
+
+        .feature-item {
+    transition: all 0.3s ease;
+    transform: translateY(0);
+}
+
+.feature-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title h2 {
+            font-family: 'Jost', serif;
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .section-title p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            color: white;
+            font-size: 30px;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .feature-card p {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+        
+        /* Популярные рецепты */
+        .popular-recipes {
+            padding: 100px 0;
+            background: #f5f5f5;
+        }
+        
+        .recipes-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .recipe-slider {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        
+        .recipe-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+        
+        .recipe-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .recipe-img {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+        
+        .recipe-info {
+            padding: 25px;
+        }
+        
+        .recipe-category {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--dark);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .recipe-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .recipe-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .recipe-description {
+            color: var(--gray);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .read-more i {
+            margin-left: 5px;
+            transition: var(--transition);
+        }
+        
+        .read-more:hover {
+            color: var(--primary-light);
+        }
+        
+        .read-more:hover i {
+            transform: translateX(5px);
+        }
+        
+        /* Подписка */
+        .newsletter {
+            padding: 80px 0;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            text-align: center;
+        }
+        
+        .newsletter-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .newsletter h2 {
+            font-family: 'Jost', serif;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .newsletter p {
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .subscribe-form {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .subscribe-form input {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 50px 0 0 50px;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        .subscribe-form button {
+            background: var(--dark);
+            color: white;
+            border: none;
+            padding: 0 30px;
+            border-radius: 0 50px 50px 0;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .subscribe-form button:hover {
+            background: #111;
+        }
+        
+        /* Подвал */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+        
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .footer-logo i {
+            color: var(--primary);
+        }
+        
+        .footer-about p {
+            opacity: 0.7;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: var(--transition);
+        }
+        
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        .footer-links h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-links h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
+        }
+        
+        .footer-links ul {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+        
+        .footer-contact {
+            h3: 1.2rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-contact h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
+        }
+        
+        .footer-contact p {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            opacity: 0.7;
+        }
+        
+        .footer-contact i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+            font-size: 14px;
+        }
+        
+        /* Анимации */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 992px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                gap: 15px;
+            }
+            
+            .hero {
+                min-height: 600px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            nav {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: var(--primary);
+                padding: 20px;
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+                transition: var(--transition);
+            }
+            
+            nav.active {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+            
+            nav ul {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .hero {
+                min-height: 500px;
+            }
+            
+            .btn {
+                padding: 12px 25px;
+                font-size: 16px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .subscribe-form {
+                flex-direction: column;
+            }
+            
+            .subscribe-form input {
+                border-radius: 50px;
+                margin-bottom: 10px;
+            }
+            
+            .subscribe-form button {
+                border-radius: 50px;
+                padding: 12px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+            
+            .btn-container {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .btn-outline {
+                margin-left: 0;
+            }
+            
+            .section-title h2 {
+                font-size: 2rem;
+            }
+        }
+        .gradient-animated-title {
+    display: inline-block;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    background: linear-gradient(45deg, var(--primary), #8bc34a, #4caf50);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    position: relative;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.gradient-animated-title::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), #8bc34a);
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 2px;
+    transition: all 0.4s ease-out;
+}
+
+.gradient-animated-title:hover::after {
+    width: 100%;
+    left: 0;
+    transform: translateX(0);
+}
+
+
+
+@media (max-width: 576px) {
+    .hero-video {
+        object-position: center center;
+    }
+    
+    .premium-section .video-background video {
+        object-position: 50% 50%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Отключаем hover эффекты на тач-устройствах */
+@media (hover: none) {
+    .recipe-card:hover,
+    .feature-card:hover,
+    .category:hover {
+        transform: none !important;
+        box-shadow: none !important;
+    }
+}
+
+/* Оптимизация для iOS */
+@supports (-webkit-touch-callout: none) {
+    body {
+        -webkit-tap-highlight-color: transparent;
+    }
+}
+
+@media (max-width: 576px) {
+    input, textarea, select {
+        font-size: 16px !important; /* Убирает масштабирование в iOS */
+    }
+    
+    .subscribe-form input,
+    .subscribe-form button {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 576px) {
+    .recipe-card {
+        margin-bottom: 20px;
+    }
+    
+    .recipe-img {
+        height: 150px;
+    }
+    
+    .recipe-info {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 576px) {
+    body {
+        font-size: 14px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    h3 {
+        font-size: 1.2rem;
+    }
+}@media (max-width: 576px) {
+    .hero-video {
+        object-position: center center;
+    }
+    
+    .premium-section .video-background video {
+        object-position: 50% 50%;
+    }
+}
+
+@media (max-width: 576px) and (orientation: landscape) {
+    .hero {
+        min-height: 400px;
+    }
+    
+    .hero-content {
+        padding-top: 50px;
+    }
+    
+    .stats-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .stat-item {
+        flex: 1 1 45%;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Герой секция */
+    .hero {
+        min-height: 500px;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+        margin-top: 80px;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .btn-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .btn-outline {
+        margin-left: 0;
+    }
+    
+    /* О нас */
+    .stats-container {
+        flex-direction: column;
+    }
+    
+    .stat-item {
+        flex: 1 1 100%;
+        margin-bottom: 20px;
+    }
+    
+    /* Премиум секция */
+    .premium-features {
+        grid-template-columns: 1fr;
+    }
+    
+    /* ТОП-3 */
+    .top-dishes-container {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Популярные рецепты */
+    .recipe-slider {
+        grid-template-columns: 1fr;
+    }
+    
+    .categories {
+        justify-content: flex-start;
+        padding-bottom: 10px;
+    }
+    
+    /* Подписка */
+    .subscribe-form {
+        padding: 15px;
+    }
+    
+    /* Футер */
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .footer-links, 
+    .footer-contact {
+        margin-top: 20px;
+    }
+    
+    /* Общие стили */
+    .section-title h2 {
+        font-size: 1.8rem;
+    }
+    
+    .section-title p {
+        font-size: 1rem;
+    }
+    
+    /* Меню */
+    nav ul {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    /* Видеофон */
+    .video-background video {
+        width: auto;
+        height: 100%;
+    }
+}
+
+
+    </style>
+    
+</head>
+<body>
+    <!-- Шапка -->
+    <header id="header">
+        <div class="header-container">
+            <a href="#" class="logo">
+                <i class="fas fa-utensils"></i>
+                FOODIE
+            </a>
+            
+            <button class="mobile-menu-btn" id="menuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <nav id="nav">
+                <ul>
+                    <li><a href="#hero" class="active">Главная</a></li>
+                    <li><a href="#about">О нас</a></li>
+                    <li><a href="#qaz">ТОП</a></li>
+                    <li><a href="#qwe">Рецепты</a></li>
+                    <li><a href="#zxc">Контакты</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Герой секция -->
+    <section class="hero">
+        <video class="hero-video" autoplay muted loop>
+            <source src="video.mp4" type="video/mp4">
+        </video>
+        
+        <div class="hero-content">
+            <h1 style="font-size: 53px;  margin: 120px 0 0 0 ;" >FOODIE</h1>
+            <h1 style="font-size: 40px; padding: none;" class="hero-title">ОТКРОЙТЕ МИР ВКУСОВ</h1>
+            <p class="hero-subtitle">Более 15,000 проверенных рецептов со всего мира.<br> Готовьте как шеф-повар с нашей кулинарной библиотекой.</p>
+            <div class="btn-container">
+                <a href="#" class="btn">Начать готовить</a>
+                <a href="#" class="btn btn-outline">Узнать больше</a>
+            </div>
+        </div>
+    </section>
+
+
+<!-- О нас -->
+<section id="about" style="padding: 100px 0; background: white; text-align: center;">
+    <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+        <div class="section-header">
+            <h1 style="color: var(--primary); padding: 20px 0 0 0; margin: 0; font-size: clamp(1.5rem, 4vw, 2rem);">FOODIE</h1>
+            <h1 style="font-size: clamp(1.2rem, 3vw, 1.5rem);">ОБЪЕДИНЕНИЕ ЛЮБИТЕЛЕЙ ВКУСНОЙ ЕДЫ</h1>
+            <p style="font-size: clamp(0.9rem, 2vw, 1rem); max-width: 800px; margin: 0 auto;">Мы предоставляем возможность кулинарам всего мира учиться, развиваться и искать вдохновение благодаря нашей кулинарной библиотеке</p>
+            
+            
+            
+            <div class="stats-container" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin: 40px 0;">
+                <div class="stat-item" style="text-align: center; padding: 15px; min-width: 200px; flex: 1 1 200px;">
+                    <div class="stat-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/512/456/456283.png" alt="Пользователи" style="width: 50px; height: 50px;">
+                    </div>
+                    <div class="stat-number" style="font-size: clamp(2rem, 6vw, 3rem); font-weight: 700; color: var(--primary); margin-bottom: 5px;">20315</div>
+                    <div class="stat-description" style="font-size: clamp(0.8rem, 2vw, 1rem); color: var(--primary);">ПОЛЬЗОВАТЕЛЕЙ</div>
+                    <p style="font-size: clamp(0.7rem, 2vw, 0.9rem); color: var(--dark); margin-top: 10px;">И аудитория нашей библиотеки<br> с каждым днем растет все больше</p>
+                </div>
+                
+                <div class="stat-item" style="text-align: center; padding: 15px; min-width: 200px; flex: 1 1 200px;">
+                    <div class="stat-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/128/921/921439.png" alt="Страны" style="width: 50px; height: 50px;">
+                    </div>
+                    <div class="stat-number" style="font-size: clamp(2rem, 6vw, 3rem); font-weight: 700; color: var(--primary); margin-bottom: 5px;">26</div>
+                    <div class="stat-description" style="font-size: clamp(0.8rem, 2vw, 1rem); color: var(--primary);">СТРАН</div>
+                    <p style="font-size: clamp(0.7rem, 2vw, 0.9rem); color: var(--dark); margin-top: 10px;">Кухня библиотеки разнообразна,<br> поскольку она многонациональна</p>
+                </div>
+                
+                <div class="stat-item" style="text-align: center; padding: 15px; min-width: 200px; flex: 1 1 200px;">
+                    <div class="stat-icon">
+                        <img src="https://cdn-icons-png.flaticon.com/128/864/864685.png" alt="Рецепты" style="width: 50px; height: 50px;">
+                    </div>
+                    <div class="stat-number" style="font-size: clamp(2rem, 6vw, 3rem); font-weight: 700; color: var(--primary); margin-bottom: 5px;">15743</div>
+                    <div class="stat-description" style="font-size: clamp(0.8rem, 2vw, 1rem); color: var(--primary);">РЕЦЕПТА</div>
+                    <p style="font-size: clamp(0.7rem, 2vw, 0.9rem); color: var(--dark); margin-top: 10px;">Пользователи постоянно пополняют<br> рецепты нашего портала</p>
+                </div>
+            </div>
+            
+            <a href="#" class="btn" style="display: inline-block; background: var(--primary); color: white; padding: 15px 35px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 18px; transition: var(--transition); border: 2px solid var(--primary);">Пора творить</a>
+        </div>
+    </div>
+</section>
+
+
+
+        <!-- О проекте -->
+<section class="premium-section" style="position: relative; padding: 80px 15px; text-align: center; overflow: hidden; margin: 60px 0;">
+    <!-- Видеофон -->
+    <div class="video-background" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;">
+        <video autoplay muted loop style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-width: 100%; min-height: 100%; width: auto; height: auto; object-fit: cover;">
+            <source src="FON.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+        </video>
+        <div class="video-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7);"></div>
+    </div>
+    
+    <div class="premium-container" style="position: relative; z-index: 1; max-width: 1200px; margin: 0 auto;">
+        <h2 class="premium-title" style="font-size: clamp(1.5rem, 5vw, 2.5rem); font-weight: 700; margin-bottom: 40px; text-transform: uppercase; letter-spacing: 1px; color: var(--primary); position: relative; display: inline-block;">FOODIE ПРОЕКТ</h2>
+        
+        <div class="premium-features" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 40px;">
+            <div class="feature-item" style="background: rgba(0, 0, 0, 0.6); border: 1px solid var(--primary);  border-radius: 10px; padding: 20px 15px; transition: all 0.3s ease;">
+                <img src="https://cdn-icons-png.flaticon.com/128/1410/1410532.png" alt="Шеф-иконка" 
+                style="width: 82px; height: 82px; 
+                       filter: brightness(0) invert(1) drop-shadow(0 0 8px rgb(19, 247, 49));">
+                <h3 class="feature-title" style="font-size: clamp(1.1rem, 3vw, 1.3rem); font-weight: 700; margin-bottom: 10px; color: var(--primary); text-transform: uppercase;">Уникальные рецепты</h3>
+                <p class="feature-description" style="font-size: clamp(0.9rem, 2vw, 1rem); line-height: 1.5; color: #fff;">Эксклюзивная коллекция рецептов от мировых шеф-поваров, доступная только для Premium пользователей</p>
+            </div>
+            
+            <div class="feature-item" style="background: rgba(0, 0, 0, 0.6); border: 1px solid var(--primary); border-radius: 10px; padding: 20px 15px; transition: all 0.3s ease;">
+                <img src="https://cdn-icons-png.flaticon.com/128/450/450166.png" alt="Шеф-иконка" 
+                style="width: 100px; height: 100px; 
+                       filter: brightness(0) invert(1) drop-shadow(0 0 8px rgb(19, 247, 49));">
+                <h3 class="feature-title" style="font-size: clamp(1.1rem, 3vw, 1.3rem); font-weight: 700; margin-bottom: 10px; color: var(--primary); text-transform: uppercase;">Персональный шеф</h3>
+                <p class="feature-description" style="font-size: clamp(0.9rem, 2vw, 1rem); line-height: 1.5; color: #fff;">Индивидуальные консультации от профессиональных поваров для создания идеального меню</p>
+            </div>
+            
+            <div class="feature-item" style="background: rgba(0, 0, 0, 0.6); border: 1px solid var(--primary); border-radius: 10px; padding: 20px 15px; transition: all 0.3s ease;">
+                <img src="https://cdn-icons-png.flaticon.com/128/3448/3448102.png" alt="Шеф-иконка" 
+                style="width: 100px; height: 100px; 
+                       filter: brightness(0) invert(1) drop-shadow(0 0 8px rgb(19, 247, 49));">
+                <h3 class="feature-title" style="font-size: clamp(1.1rem, 3vw, 1.3rem); font-weight: 700; margin-bottom: 10px; color: var(--primary); text-transform: uppercase;">Премиум ингредиенты</h3>
+                <p class="feature-description" style="font-size: clamp(0.9rem, 2vw, 1rem); line-height: 1.5; color: #fff;">Доступ к редким и сезонным продуктам с доставкой прямо к вашей двери</p>
+            </div>
+            
+            <div class="feature-item" style="background: rgba(0, 0, 0, 0.6); border: 1px solid var(--primary); border-radius: 10px; padding: 20px 15px; transition: all 0.3s ease;">
+                <img src="https://cdn-icons-png.flaticon.com/128/10455/10455354.png" alt="Шеф-иконка" 
+                style="width: 100px; height: 100px; 
+                       filter: brightness(0) invert(1) drop-shadow(0 0 8px rgb(19, 247, 49));">
+                <h3 class="feature-title" style="font-size: clamp(1.1rem, 3vw, 1.3rem); font-weight: 700; margin-bottom: 10px; color: var(--primary); text-transform: uppercase;">Эксклюзивные мастер-классы</h3>
+                <p class="feature-description" style="font-size: clamp(0.9rem, 2vw, 1rem); line-height: 1.5; color: #fff;">Онлайн и оффлайн мероприятия с топовыми шефами ресторанов</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Блок ТОП-3 -->
+<section id="qaz" class="top-dishes-section" style="padding: 60px 0; background: #f9f9f9;">
+    <div class="top-dishes-header" style="text-align: center; margin-bottom: 40px;">
+        <h2 style="font-family: 'Jost', sans-serif; color: var(--dark); display: flex; align-items: center; justify-content: center; gap: 10px;">
+           
+            ТОП-3 блюда по версии FOODIE
+        </h2>
+        <p style="color: var(--gray); max-width: 600px; margin: 10px auto;">
+            Выбор нашей аудитории.<br> Голосуйте за любимые рецепты!
+        </p>
+    </div>
+
+    <div class="top-dishes-container" id="topDishesContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+        <!-- Карточки будут добавляться через JS -->
+    </div>
+</section>
+
+
+    <!-- Популярные рецепты -->
+    <section id="qwe" class="popular-recipes">
+        <div class="recipes-container">
+            <div class="section-title">
+                <h2>Популярные рецепты</h2>
+                <p>Попробуйте наши самые популярные рецепты, которые полюбились тысячам пользователей</p>
+            </div>
+            
+            <!-- Добавленный блок поиска и категорий -->
+            <div class="search-container">
+                <input type="text" class="search-box" placeholder="Найти рецепт..." id="searchInput">
+            </div>
+            
+            <div class="categories">
+                <div class="category active">Все</div>
+                <div class="category">Итальянская</div>
+                <div class="category">Азиатская</div>
+                <div class="category">Французская</div>
+                <div class="category">Русская</div>
+                <div class="category">Мексиканская</div>
+                <div class="category">Вегетарианская</div>
+                <div class="category">Десерты</div>
+            </div>
+            
+            <div class="recipe-slider" id="recipesContainer">
+                <div class="recipe-card">
+                    <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141" alt="Паста Карбонара" class="recipe-img">
+                    <div class="recipe-info">
+                        <span class="recipe-category">Итальянская</span>
+                        <h3 class="recipe-title">Паста Карбонара</h3>
+                        <div class="recipe-meta">
+                            <span><i class="far fa-clock"></i> 30 мин</span>
+                            <span><i class="fas fa-fire"></i> Средняя</span>
+                        </div>
+                        <p class="recipe-description">Классическая итальянская паста с соусом из яиц, сыра пармезан, гуанчиале и черного перца.</p>
+                        <a href="#" class="read-more">Читать рецепт <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <div class="recipe-card">
+                    <img src="https://images.unsplash.com/photo-1569718212165-3a8278d5f624" alt="Рамен" class="recipe-img">
+                    <div class="recipe-info">
+                        <span class="recipe-category">Азиатская</span>
+                        <h3 class="recipe-title">Рамен с курицей</h3>
+                        <div class="recipe-meta">
+                            <span><i class="far fa-clock"></i> 45 мин</span>
+                            <span><i class="fas fa-fire"></i> Средняя</span>
+                        </div>
+                        <p class="recipe-description">Японский суп с пшеничной лапшой, курицей, яйцом и овощами в ароматном бульоне.</p>
+                        <a href="#" class="read-more">Читать рецепт <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                
+                <div class="recipe-card">
+                    <img src="https://image.mel.fm/i/b/b6J5FH4G6O/1280.jpg" alt="Тирамису" class="recipe-img">
+                    <div class="recipe-info">
+                        <span class="recipe-category">Десерты</span>
+                        <h3 class="recipe-title">Тирамису</h3>
+                        <div class="recipe-meta">
+                            <span><i class="far fa-clock"></i> 1 ч 20 мин</span>
+                            <span><i class="fas fa-fire"></i> Средняя</span>
+                        </div>
+                        <p class="recipe-description">Итальянский десерт из печенья савоярди, сыра маскарпоне, кофе и какао.</p>
+                        <a href="#" class="read-more">Читать рецепт <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <style>
+        /* Анимация для карточек */
+.top-dish-card:hover {
+    transform: translateY(-10px) !important;
+    box-shadow: 0 15px 30px rgba(101, 179, 12, 0.15) !important;
+}
+
+/* Анимация кнопки голосования */
+.vote-btn:hover {
+    background: var(--primary-light) !important;
+    transform: translateY(-2px);
+}
+
+/* Микроанимация сердечка */
+@keyframes heartBeat {
+    0% { transform: scale(1); }
+    25% { transform: scale(1.3); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.voted i {
+    animation: heartBeat 0.6s ease-in-out;
+}
+    </style>
+
+    <!-- Подписка -->
+ <!-- Секция подписки с вертикальными полями -->
+<section id="zxc" class="subscribe-section" style="padding: 80px 0; background: linear-gradient(135deg, #65b30c, #8bc34a); font-family: 'Jost', sans-serif; color: white;">
+    <div class="container" style="max-width: 600px; margin: 0 auto; padding: 0 20px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h2 style="font-size: 28px; margin-bottom: 10px; font-weight: 700;">FOODIE</h2>
+            <h3 style="font-size: 22px; margin-bottom: 15px;">Подпишитесь на рассылку</h3>
+            <p style="font-size: 16px; opacity: 0.9;">Получайте эксклюзивные рецепты и кулинарные советы</p>
+        </div>
+        
+        <div class="subscribe-card" style="background: white; border-radius: 15px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            <form id="subscribeForm" class="subscribe-form" style="display: flex; flex-direction: column; gap: 15px;">
+                <div class="form-group">
+                    <label for="name" style="display: block; margin-bottom: 8px; color: #222; font-weight: 500;">Имя</label>
+                    <input type="text" id="name" required style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px;">
+                </div>
+                
+                <div class="form-group">
+                    <label for="surname" style="display: block; margin-bottom: 8px; color: #222; font-weight: 500;">Фамилия</label>
+                    <input type="text" id="surname" required style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px;">
+                </div>
+                
+                <div class="form-group">
+                    <label for="patronymic" style="display: block; margin-bottom: 8px; color: #222; font-weight: 500;">Отчество</label>
+                    <input type="text" id="patronymic" style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px;">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" style="display: block; margin-bottom: 8px; color: #222; font-weight: 500;">Email</label>
+                    <input type="email" id="email" required style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px;">
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone" style="display: block; margin-bottom: 8px; color: #222; font-weight: 500;">Телефон</label>
+                    <input type="tel" id="phone" required style="width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px;">
+                </div>
+                
+                <button type="submit" style="background: #65b30c; color: white; border: none; padding: 15px; border-radius: 50px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; transition: all 0.3s ease; margin-top: 10px;">
+                    Подписаться
+                </button>
+            </form>
+            
+            <!-- Сообщение об успешной подписке (изначально скрыто) -->
+            <div id="successMessage" style="display: none; text-align: center; padding: 20px; background: #e8f5e9; border-radius: 10px; margin-top: 20px;">
+                <h3 style="color: #2e7d32; margin-bottom: 10px;">Спасибо за подписку! </h3>
+                <p style="color: #1b5e20;">Мы отправили вам письмо с подтверждением.</p>
+            </div>
+            
+            <p style="font-size: 12px; color: #7f8c8d; text-align: center; margin-top: 20px;">Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности</p>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.getElementById('subscribeForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // Отменяем стандартную отправку формы
+        
+        // Очищаем поля формы
+        this.reset();
+        
+        // Скрываем форму и показываем сообщение
+        this.style.display = 'none';
+        document.getElementById('successMessage').style.display = 'block';
+        
+        // Можно добавить отправку данных на сервер через fetch() или AJAX
+        // Пример:
+        /*
+        const formData = new FormData(this);
+        fetch('/subscribe', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+        */
+    });
+ </script>
+<!-- Футер (оставлен без изменений) -->
+<footer style="background: #222; color: white; padding: 50px 0 20px; font-family: 'Jost', sans-serif;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;">
+        <div class="footer-about">
+            <div style="font-size: 24px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                <i class="fas fa-utensils" style="color: #65b30c;"></i>
+                FOODIE
+            </div>
+            <p style="opacity: 0.7; line-height: 1.7; margin-bottom: 20px;">Кулинарная библиотека для тех, кто любит готовить.</p>
+        </div>
+        
+        <div class="footer-links">
+            <h3 style="font-size: 1.2rem; margin-bottom: 20px; position: relative; padding-bottom: 10px;">
+                Навигация
+                <span style="position: absolute; bottom: 0; left: 0; width: 40px; height: 2px; background: #65b30c;"></span>
+            </h3>
+            <ul style="list-style: none;">
+                <li style="margin-bottom: 10px;"><a href="#hero" style="color: rgba(255, 255, 255, 0.7); text-decoration: none;">Главная</a></li>
+                <li style="margin-bottom: 10px;"><a href="#about" style="color: rgba(255, 255, 255, 0.7); text-decoration: none;">О нас</a></li>
+                <li style="margin-bottom: 10px;"><a href="#qaz" style="color: rgba(255, 255, 255, 0.7); text-decoration: none;">ТОП</a></li>
+                <li style="margin-bottom: 10px;"><a href="#qwe" style="color: rgba(255, 255, 255, 0.7); text-decoration: none;">Рецепты</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-links">
+            <h3 style="font-size: 1.2rem; margin-bottom: 20px; position: relative; padding-bottom: 10px;">
+                Категории
+                <span style="position: absolute; bottom: 0; left: 0; width: 40px; height: 2px; background: #65b30c;"></span>
+            </h3>
+            <ul style="list-style: none;">
+                <li style="margin-bottom: 10px;"><a href="#" style="color: rgba(255, 255, 255, 0.7); text-decoration: none;">Итальянская</a></li>
+                <li style="margin-bottom: 10px;"><a href="#" style="color: rgba(255, 255, 255, 0.7); text-decoration: none;">Азиатская</a></li>
+                <li style="margin-bottom: 10px;"><a href="#" style="color: rgba(255, 255, 255, 0.7); text-decoration: none;">Русская</a></li>
+                <li style="margin-bottom: 10px;"><a href="#" style="color: rgba(255, 255, 255, 0.7); text-decoration: none;">Десерты</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-contact">
+            <h3 style="font-size: 1.2rem; margin-bottom: 20px; position: relative; padding-bottom: 10px;">
+                Контакты
+                <span style="position: absolute; bottom: 0; left: 0; width: 40px; height: 2px; background: #65b30c;"></span>
+            </h3>
+            <p style="display: flex; align-items: center; margin-bottom: 15px; opacity: 0.7;">
+                <i class="fas fa-map-marker-alt" style="margin-right: 10px; color: #65b30c;"></i>
+                Москва, ул. Кулинарная, 15
+            </p>
+            <p style="display: flex; align-items: center; margin-bottom: 15px; opacity: 0.7;">
+                <i class="fas fa-phone" style="margin-right: 10px; color: #65b30c;"></i>
+                +7 (123) 456-78-90
+            </p>
+            <p style="display: flex; align-items: center; margin-bottom: 15px; opacity: 0.7;">
+                <i class="fas fa-envelope" style="margin-right: 10px; color: #65b30c;"></i>
+                info@foodie.ru
+            </p>
+        </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); opacity: 0.7; font-size: 14px;">
+        &copy; 2023 FOODIE. Все права защищены.
+    </div>
+</footer>
+
+    <script>
+        // Мобильное меню
+        const menuBtn = document.getElementById('menuBtn');
+        const nav = document.getElementById('nav');
+        
+        menuBtn.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            menuBtn.innerHTML = nav.classList.contains('active') ? 
+                '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Фиксированная шапка при скролле
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            header.classList.toggle('scrolled', window.scrollY > 50);
+        });
+        
+        // Плавный скролл для якорей
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Закрываем мобильное меню после клика
+                    if(nav.classList.contains('active')) {
+                        nav.classList.remove('active');
+                        menuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                    }
+                }
+            });
+        });
+    
+        // Данные рецептов
+        const recipes = [
+            {
+                id: 1,
+                title: "Паста Карбонара",
+                category: "Итальянская",
+                time: "30 мин",
+                difficulty: "Средняя",
+                image: "https://images.unsplash.com/photo-1551183053-bf91a1d81141",
+                description: "Классическая итальянская паста с соусом из яиц, сыра пармезан, гуанчиале и черного перца."
+            },
+            {
+                id: 2,
+                title: "Рамен с курицей",
+                category: "Азиатская",
+                time: "45 мин",
+                difficulty: "Средняя",
+                image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624",
+                description: "Японский суп с пшеничной лапшой, курицей, яйцом и овощами в ароматном бульоне."
+            },
+            {
+                id: 3,
+                title: "Тирамису",
+                category: "Десерты",
+                time: "1 ч 20 мин",
+                difficulty: "Средняя",
+                image: "https://image.mel.fm/i/b/b6J5FH4G6O/1280.jpg",
+                description: "Итальянский десерт из печенья савоярди, сыра маскарпоне, кофе и какао."
+            },
+            {
+                id: 4,
+                title: "Борщ",
+                category: "Русская",
+                time: "1.5 часа",
+                difficulty: "Средняя",
+                image: "https://adygsalt.ru/blog/foto/borsh/3.jpg",
+                description: "Традиционный восточнославянский суп с свёклой, капустой, картофелем и мясом."
+            },
+            {
+                id: 5,
+                title: "Такос",
+                category: "Мексиканская",
+                time: "25 мин",
+                difficulty: "Легкая",
+                image: "https://images.unsplash.com/photo-1565299585323-38d6b0865b47",
+                description: "Мексиканская закуска из кукурузной или пшеничной тортильи с различными начинками."
+            },
+            {
+                id: 6,
+                title: "Фалафель",
+                category: "Вегетарианская",
+                time: "40 мин",
+                difficulty: "Средняя",
+                image: "https://avatars.dzeninfra.ru/get-zen_doc/1594643/pub_5da03b4fba281e00b3fa79f4_5da04012d7859b00ae871668/scale_1200",
+                description: "Жареные шарики из нута с пряностями, популярные на Ближнем Востоке."
+            },
+            {
+                id: 7,
+                title: "Круассаны",
+                category: "Французская",
+                time: "3 часа",
+                difficulty: "Сложная",
+                image: "https://thumbs.dreamstime.com/b/%D1%81%D0%B2%D0%B5%D0%B6%D0%B8%D0%B5-%D0%B2%D0%BA%D1%83%D1%81%D0%BD%D1%8B%D0%B5-%D0%BA%D1%80%D1%83%D0%B0%D1%81%D1%81%D0%B0%D0%BD%D1%8B-%D1%81-%D1%8F%D0%B3%D0%BE%D0%B4%D0%B0%D0%BC%D0%B8-%D0%BD%D0%B0-%D0%B1%D0%B5%D0%BB%D0%BE%D0%B9-%D0%B4%D0%B5%D1%80%D0%B5%D0%B2%D1%8F%D0%BD%D0%BD%D0%BE%D0%B9-%D0%BF%D1%80%D0%B5%D0%B4%D0%BF%D0%BE%D1%81%D1%8B%D0%BB%D0%BA%D0%B5-128764257.jpg",
+                description: "Французские слоёные булочки с хрустящей корочкой и нежной текстурой."
+            },
+            {
+                id: 8,
+                title: "Пельмени",
+                category: "Русская",
+                time: "1.5 часа",
+                difficulty: "Средняя",
+                image: "https://img.gazeta.ru/files3/121/14619121/GettyImages-1313745502-pic4_zoom-1500x1500-59684.jpg",
+                description: "Традиционное блюдо русской кухни из теста с мясной начинкой."
+            },
+            {
+                id: 9,
+                title: "Лазанья",
+                category: "Итальянская ",
+                time: "60 мин",
+                difficulty: "Средняя",
+                image: "https://avatars.mds.yandex.net/i?id=a84e5844624042147acd0329e0d7c742_l-5163390-images-thumbs&n=13",
+                description: "Слои пасты, фаршированные мясом, томатным соусом и сыром, запеченные до золотистой корочки покорят ваше сердце."
+            },
+            {
+                id: 10,
+                title: "Ризотто с грибами",
+                category: "Итальянская",
+                time: "120 мин",
+                difficulty: "Сложная",
+                image: "https://avatars.mds.yandex.net/i?id=1fbd78e42de7dd30c9793be0cf22e864_l-8339915-images-thumbs&n=13",
+                description: "Кремообразное блюдо из риса арборио, приготовленного с бульоном и грибами, часто с добавлением пармезана."
+            },
+            {
+                id: 11,
+                title: "Беф бургиньон",
+                category: "Французская",
+                time: "55 мин",
+                difficulty: "Средняя",
+                image: "https://i.pinimg.com/originals/82/87/ba/8287baf5d1027b83eedbdbab28a8f44f.jpg",
+                description: " Тушеная говядина, приготовленная в красном вине с овощами, грибами и специями, традиционное блюдо из региона Бургундия."
+            },
+            {
+                id: 12,
+                title: "Киш Лорен",
+                category: "Французская",
+                time: "35 мин",
+                difficulty: "Легкая",
+                image: "https://avatars.mds.yandex.net/i?id=5319e1b35594834b8f2c769f7ce604e8a417dd80-5350576-images-thumbs&n=13",
+                description: "Открытый пирог с начинкой из яиц, сливок, сыра и бекона, запеченный до золотистой корочки."
+            },
+            {
+                id: 13,
+                title: "Блинчики с начинкой ",
+                category: "Русская",
+                time: "45 мин",
+                difficulty: "Средняя",
+                image: "https://main-cdn.sbermegamarket.ru/big2/hlr-system/177/357/677/314/122/100030786542b5.jpg",
+                description: "Румяные, нежные и ароматные, с сочной начинкой внутри. Идеальное сочетание хрустящих краёв и мягкой серединки."
+            },
+            {
+                id: 14,
+                title: "Суши",
+                category: "Азиатская",
+                time: "20 мин",
+                difficulty: "Легкое",
+                image: "https://cdnn1.inosmi.ru/img/25040/86/250408630_0:96:1920:1104_1920x0_80_0_0_ba53bbf90838240355d3e2dac9f8f02d.jpg",
+                description: "Искусные рулетики с нежным рисом, свежей рыбой и авокадо. Подаются с васаби, имбирём и соевым соусом. Идеальный баланс вкусов!"
+            },
+            {
+                id: 15,
+                title: "Пад Тай",
+                category: "Азиатская",
+                time: "35 мин",
+                difficulty: "Среднее",
+                image: "https://cdnn21.img.ria.ru/images/07e5/0b/08/1758075702_0:0:3072:2048_900x0_80_0_0_ddd7c7aea5dd6d27003ca9026adeddaf.jpg",
+                description: "Тайская лапша с креветками, тофу, яйцом и арахисом. Островато-сладкий вкус с лёгкой кислинкой лайма."
+            },
+            {
+                id: 16,
+                title: "Фо",
+                category: "Азиатская",
+                time: "55 мин",
+                difficulty: "Среднее",
+                image: "https://avatars.mds.yandex.net/get-altay/2044663/2a000001709efd53fc62d8c2e268cddde168/XXXL",
+                description: "Вьетнамский ароматный суп с говядиной, рисовой лапшой и свежей зеленью. Подаётся с лаймом, чили и ростками сои."
+            },
+            {
+                id: 17,
+                title: "Чизкейк",
+                category: "Десерты",
+                time: "130 мин",
+                difficulty: "Среднее",
+                image: "https://static.tildacdn.com/tild3231-3339-4639-b534-313965313364/4c1a0a545bb1c21b9e3b.png",
+                description: "Нежный десерт с кремовой текстурой и хрустящей основой. Ванильный, шоколадный или с ягодным топпингом – всегда восхищает!"
+            },
+            {
+                id: 18,
+                title: "Крем-Брюле",
+                category: "Десерты",
+                time: "90 мин",
+                difficulty: "Среднее",
+                image: "https://avatars.mds.yandex.net/i?id=c90450f3f232f48bd655db3e07569fb5_l-12421870-images-thumbs&n=13",
+                description: "Хрустящая карамельная корочка скрывает под собой бархатистый ванильный крем. Идеальный финал ужина."
+            },
+            {
+                id: 19,
+                title: "Гуакамоле",
+                category: "Мексиканская",
+                time: "62 мин",
+                difficulty: "Среднее",
+                image: "https://i.pinimg.com/736x/7d/c1/d3/7dc1d30f7136ebaada2082d543a543b8.jpg",
+                description: "Мексиканская закуска из авокадо с лаймом, кинзой и чили. Отлично сочетается с тортильей или чипсами."
+            },
+            {
+                id: 20,
+                title: "Энчиладас",
+                category: "Мексиканская",
+                time: "73 мин",
+                difficulty: "Среднее",
+                image: "https://i.pinimg.com/736x/c4/b8/64/c4b8647135504cb8790c03f69fc009bb.jpg",
+                description: "Кукурузные тортильи, завёрнутые с курицей или сыром, запечённые под томатно-перечным соусом. Подаются со сметаной."
+            },
+            {
+                id: 21,
+                title: "Киноа с овощами",
+                category: "Вегетарианская",
+                time: "85 мин",
+                difficulty: "Среднее",
+                image: "https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_674d9442a34584092f90a037_674d9444a13e2e343aefcd8f/scale_1200",
+                description: "Лёгкое и полезное блюдо с киноа, свежими овощами и лимонной заправкой. Богато белком и витаминами."
+            },
+            {
+                id: 22,
+                title: "Овощное рагу",
+                category: "Вегетарианская",
+                time: "110 мин",
+                difficulty: "Среднее",
+                image: "https://avatars.mds.yandex.net/i?id=88a0766d62b9b8b60d085065b47689a4_l-5858730-images-thumbs&n=13",
+                description: "Ароматное блюдо с сезонными овощами, томатами и травами. Тушёное до идеальной нежности."
+            },
+
+
+
+        ];
+        const recipeLinks = {
+    1: "https://rutube.ru/video/4eacc8355ab2f4595d617ba7cf9f1855/?r=wd",
+    2: "https://1000.menu/cooking/73703-sup-ramen-s-kuricei?ysclid=m9izc3k12a418013829",
+    3: "https://rutube.ru/video/df0b4463a53ed04339b83924a11257da/?r=wd",
+    4: "https://rutube.ru/video/5bb7fb91e407f877f2fba1ad0fdeeaec/?r=wd",
+    5: "https://rutube.ru/video/d2bd5ab414c321d141664958eeca264f/?r=wd",
+    6: "https://rutube.ru/video/c7a85d15c36cd59a448c1cba9566775d/?r=wd",
+    7: "https://rutube.ru/video/6228b5cc2cb5cead217f3ae308fedaa4/?r=wd",
+    8: "https://rutube.ru/video/b82c9540b819fcea8c79d4fc64091749/?r=wd",
+    9: "https://rutube.ru/video/8d19ae10b065a0f25b1c15e48c7b00cf/?r=wd",
+    10: "https://rutube.ru/video/b5be35129a9c9d77aa3782db34a0b134/?r=wd",
+    11: "https://rutube.ru/video/ecbfbfc19c482d07cc4c9f1a4cd01116/?r=wd",
+    12: "https://rutube.ru/video/371a3f50b538ecd5d51bd1ee6cae7f48/?r=wd",
+    13: "https://rutube.ru/video/db2af88331e764fa0e1c4d0c5d02f5f4/?r=wd",
+    14: "https://rutube.ru/video/c283c7391cf3fb64495cdf20b858fbf8/?r=wd",
+    15: "https://1000.menu/cooking/87156-lapsha-pad-tai-s-kuricei?ysclid=m9izlunij2521753915",
+    16: "https://1000.menu/cooking/52395-klassicheskii-vetnamskii-sup-fo-bo?ysclid=m9izmgidw840179741",
+    17: "https://rutube.ru/video/d18ea97ccf8013d59db364ca78dbdfb4/?r=wd",
+    18: "https://1000.menu/catalog/krem-brule?ysclid=m9iznow5i1132960287",
+    19: "https://1000.menu/cooking/31765-sous-guakamole-klassicheskii?ysclid=m9izo52aym305564003",
+    20: "https://www.povarenok.ru/recipes/show/69354/",
+    21: "https://www.russianfood.com/recipes/recipe.php?rid=161448",
+    22: "https://rutube.ru/video/652eda458279967b680c59702586bab8/?r=wd"
+};
+    
+        // Функция отображения рецептов
+        function displayRecipes(recipesToDisplay) {
+            const recipesContainer = document.getElementById('recipesContainer');
+            recipesContainer.innerHTML = '';
+            
+            if (recipesToDisplay.length === 0) {
+                recipesContainer.innerHTML = '<p style="grid-column: 1/-1; text-align: center; font-size: 18px;">Рецептов не найдено. Попробуйте изменить критерии поиска.</p>';
+                return;
+            }
+            
+            recipesToDisplay.forEach(recipe => {
+                const recipeCard = document.createElement('div');
+                recipeCard.className = 'recipe-card';
+                recipeCard.innerHTML = `
+                    <img src="${recipe.image}" alt="${recipe.title}" class="recipe-img">
+                    <div class="recipe-info">
+                        <span class="recipe-category">${recipe.category}</span>
+                        <h3 class="recipe-title">${recipe.title}</h3>
+                        <div class="recipe-meta">
+                            <span><i class="far fa-clock"></i> ${recipe.time}</span>
+                            <span><i class="fas fa-fire"></i> ${recipe.difficulty}</span>
+                        </div>
+                        <p class="recipe-description">${recipe.description}</p>
+                        <a href="${recipeLinks[recipe.id]}" target="_blank" class="read-more">Читать рецепт <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                `;
+                recipesContainer.appendChild(recipeCard);
+            });
+        }
+    
+        // Инициализация - показываем все рецепты
+        displayRecipes(recipes);
+    
+        // Поиск рецептов
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const filteredRecipes = recipes.filter(recipe => 
+                recipe.title.toLowerCase().includes(searchTerm) || 
+                recipe.description.toLowerCase().includes(searchTerm) ||
+                recipe.category.toLowerCase().includes(searchTerm)
+            );
+            displayRecipes(filteredRecipes);
+        });
+    
+        // Фильтрация по категориям
+        const categories = document.querySelectorAll('.category');
+        categories.forEach(category => {
+            category.addEventListener('click', function() {
+                categories.forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                
+                const categoryName = this.textContent;
+                if (categoryName === 'Все') {
+                    displayRecipes(recipes);
+                } else {
+                    const filteredRecipes = recipes.filter(recipe => recipe.category === categoryName);
+                    displayRecipes(filteredRecipes);
+                }
+            });
+        });
+         
+        // Данные для ТОП-3
+        const topDishes = [
+            {
+                id: 1,
+                name: "Паста Карбонара",
+                description: "Классическая итальянская паста с соусом из яиц, пармезана и гуанчиале.",
+                image: "https://images.unsplash.com/photo-1551183053-bf91a1d81141",
+                place: "🥇 1-е место",
+                placeColor: "#ffd700"
+            },
+            {
+                id: 2,
+                name: "Рамен с курицей",
+                description: "Японский суп с лапшой, курицей и яйцом в ароматном бульоне.",
+                image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624",
+                place: "🥈 2-е место",
+                placeColor: "#c0c0c0"
+            },
+            {
+                id: 3,
+                name: "Тирамису",
+                description: "Итальянский десерт с печеньем савоярди и кремом из маскарпоне.",
+                image: "https://image.mel.fm/i/b/b6J5FH4G6O/1280.jpg",
+                place: "🥉 3-е место",
+                placeColor: "#cd7f32"
+            }
+        ];
+    
+        // Функция для загрузки голосов из localStorage
+        function getVotes() {
+            const votes = localStorage.getItem('dishVotes');
+            return votes ? JSON.parse(votes) : { 1: 1254, 2: 982, 3: 756 };
+        }
+    
+        // Функция для сохранения голосов
+        function saveVotes(votes) {
+            localStorage.setItem('dishVotes', JSON.stringify(votes));
+        }
+    
+        // Функция для получения списка проголосованных блюд
+        function getVotedDishes() {
+            const voted = localStorage.getItem('votedDishes');
+            return voted ? JSON.parse(voted) : [];
+        }
+    
+        // Функция для сохранения информации о голосовании
+        function saveVotedDish(dishId) {
+            const voted = getVotedDishes();
+            if (!voted.includes(dishId)) {
+                voted.push(dishId);
+                localStorage.setItem('votedDishes', JSON.stringify(voted));
+            }
+        }
+    
+        // Функция голосования с анимацией
+        function voteForDish(dishId, button) {
+            const votedDishes = getVotedDishes();
+            
+            // Проверяем, голосовал ли уже пользователь за это блюдо
+            if (votedDishes.includes(dishId)) {
+                return;
+            }
+    
+            const votes = getVotes();
+            votes[dishId] = (votes[dishId] || 0) + 1;
+            saveVotes(votes);
+            saveVotedDish(dishId);
+    
+            // Анимация сердечка
+            const heartIcon = button.querySelector('i');
+            heartIcon.style.transform = 'scale(1.3)';
+            heartIcon.style.color = '#ff4081';
+            
+            setTimeout(() => {
+                heartIcon.style.transform = 'scale(1)';
+            }, 300);
+    
+            // Обновляем счетчик
+            document.querySelectorAll('.vote-count').forEach(el => {
+                if (parseInt(el.closest('.top-dish-card').querySelector('.vote-btn').getAttribute('data-id')) === dishId) {
+                    el.textContent = votes[dishId];
+                }
+            });
+    
+            button.classList.add('voted');
+            button.innerHTML = `<i class="fas fa-check" style="margin-right: 5px;"></i>Ваш голос учтён!`;
+            button.style.background = '#4caf50';
+            button.disabled = true;
+        }
+    
+        // Функция для отрисовки карточек
+        function renderTopDishes() {
+            const container = document.getElementById('topDishesContainer');
+            const votes = getVotes();
+            const votedDishes = getVotedDishes();
+    
+            container.innerHTML = topDishes.map(dish => {
+                const isVoted = votedDishes.includes(dish.id);
+                
+                return `
+                <div class="top-dish-card" style="background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: all 0.3s ease; position: relative;">
+                    <div style="position: absolute; top: 10px; left: 10px; background: ${dish.placeColor}; color: white; padding: 5px 15px; border-radius: 20px; font-weight: 600; font-size: 14px; z-index: 2;">
+                        ${dish.place}
+                    </div>
+                    <img src="${dish.image}" alt="${dish.name}" style="width: 100%; height: 200px; object-fit: cover;">
+                    <div style="padding: 20px;">
+                        <h3 style="font-size: 1.3rem; margin-bottom: 10px; color: var(--dark);">${dish.name}</h3>
+                        <p style="color: var(--gray); margin-bottom: 15px; line-height: 1.5;">${dish.description}</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="color: var(--primary); font-weight: 600;">
+                                <span class="vote-count">${votes[dish.id]}</span> голосов
+                            </span>
+                            <button 
+                                class="vote-btn ${isVoted ? 'voted' : ''}" 
+                                data-id="${dish.id}"
+                                style="background: ${isVoted ? '#4caf50' : 'var(--primary)'}; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: ${isVoted ? 'default' : 'pointer'}; transition: all 0.3s ease; position: relative; overflow: hidden;"
+                                ${isVoted ? 'disabled' : ''}>
+                                ${isVoted ? '<i class="fas fa-check" style="margin-right: 5px;"></i>Ваш голос учтён!' : '<i class="fas fa-heart" style="margin-right: 5px;"></i>Голосовать'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+    
+            // Добавляем обработчики событий
+            document.querySelectorAll('.vote-btn:not(.voted)').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const dishId = parseInt(this.getAttribute('data-id'));
+                    voteForDish(dishId, this);
+                });
+            });
+        }
+    
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', renderTopDishes);
+    </script>
+    <script>
+        // Исправление 100vh на мобильных устройствах
+        function fixVH() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+        
+        window.addEventListener('resize', fixVH);
+        window.addEventListener('orientationchange', fixVH);
+        fixVH();
+        
+        // Затем в CSS замени все height: 100vh на height: calc(var(--vh, 1vh) * 100);
+    </script>
+</body>
+</html>
